@@ -1,4 +1,3 @@
-
 const TIERS = [
   {id:"elite",  name:"Elite",          c:"var(--t-elite)", light:true},
   {id:"awesome",name:"Awesome",        c:"var(--t-awesome)", light:true},
@@ -66,10 +65,31 @@ const saveState = () => push();
 const saveEntry = () => push();
 function report(r, okMsg){ toast(r.ok ? (r.note || okMsg) : r.msg); }
 
+/* ---------- guest view (read-only, no sign-in) ---------- */
+const GUEST_KEY = "parklog-guest-v1";
+const isGuest = () => !!sb && !session;
+async function loadPublic(){
+  let loaded = false;
+  if(navigator.onLine){
+    try{
+      const {data, error} = await sb.from("park_log").select("data").limit(1).maybeSingle();
+      if(!error && data && validData(data.data)){
+        setData(data.data); loaded = true;
+        try{ localStorage.setItem(GUEST_KEY, JSON.stringify(data.data)); }catch(e){}
+      }
+    }catch(e){}
+  }
+  if(!loaded){
+    let g = null; try{ g = JSON.parse(localStorage.getItem(GUEST_KEY) || "null"); }catch(e){}
+    if(validData(g)) setData(g);
+    else { try{ setData(await fetchStarterData()); }catch(e){} }
+  }
+}
+
 async function pull(){
   if(!sb || !session || !navigator.onLine) return;
   const cached = readCache();
-  if(cached && cached.dirty){ report(await push(), "Changes you made offline are synced."); return; }
+  if(cached && cached.dirty){ if(validData(cached.data)) setData(cached.data); renderAll(); report(await push(), "Changes you made offline are synced."); return; }
   const {data, error} = await sb.from("park_log").select("data").maybeSingle();
   if(error){ toast("Couldn't load from your account. Showing what's saved on this device."); return; }
   if(!data){
@@ -118,7 +138,7 @@ function renderHeader(){
   $("#headline").textContent = state.parks[0] ? `${state.parks[0].name} is number one.` : "Park Log";
   $("#tally").innerHTML = state.parks.map(p=>`<span class="v${p.tier==="elite"?" top":p.tier==="awesome"?" aw":""}"></span>`).join("") + state.never.map(()=>"<span></span>").join("");
   $("#tallyText").innerHTML = `<strong>${n} of ${total}</strong> national parks visited. Gold dots are my elite parks, green are awesome, and white are the ones still to go.`;
-  $("#rankIntro").textContent = `All ${n}, best to worst. Open a park to write about it, log your hikes, and see every stamp from that park.`;
+  $("#rankIntro").textContent = isGuest() ? `All ${n}, best to worst. Open a park to see my thoughts, hikes, and every stamp from it.` : `All ${n}, best to worst. Open a park to write about it, log your hikes, and see every stamp from that park.`;
   const left = state.never.length, ak = state.never.filter(x=>ALASKA.has(x)).length;
   $("#todoIntro").textContent = left ? `${left} park${left>1?"s":""} left to go${ak?`, ${ak} of them in Alaska`:""}.` : "Every park visited. Time to start over.";
 }
@@ -134,7 +154,7 @@ function renderRanking(){
       <div>
         <button class="name-btn" type="button"><h2 class="park-name">${esc(p.name)}</h2></button>
         <p class="park-meta"><span>${esc(p.state)}</span>${tierChip(p.tier)}</p>
-        ${j.blurb ? `<p class="blurb">${esc(j.blurb)}</p>` : `<p class="blurb empty">No thoughts written yet. Open to add them.</p>`}
+        ${j.blurb ? `<p class="blurb">${esc(j.blurb)}</p>` : (isGuest() ? "" : `<p class="blurb empty">No thoughts written yet. Open to add them.</p>`)}
         ${hikes ? `<p class="hike-count">${hikes} hike${hikes>1?"s":""} logged${miles?`, ${+miles.toFixed(1)} miles`:""}</p>`:""}
       </div>
       <div class="latest">${p.latest || "—"}<small>${p.latest ? "last visit" : "year not logged"}</small></div>
@@ -221,7 +241,7 @@ function renderDialog(){
       ${editMode ? `<div class="edit-panel"><h3>Park details</h3>${detailsForm(p,false)}</div>` : (p.known?`<p class="known">${esc(p.known)}</p>`:"")}
 
       <div>
-        <h3>My thoughts ${!editingBlurb ? `<button class="link-btn" type="button" data-edit>${j.blurb?"Edit":"Write"}</button>`:""}</h3>
+        <h3>My thoughts ${!editingBlurb && !isGuest() ? `<button class="link-btn" type="button" data-edit>${j.blurb?"Edit":"Write"}</button>`:""}</h3>
         ${editingBlurb
           ? `<textarea id="blurbInput" aria-label="Your thoughts on ${esc(p.name)}" placeholder="What made it great (or not)? Best moment, what you'd do differently, who should go.">${esc(j.blurb||"")}</textarea>
              <div class="row-btns"><button class="btn" type="button" data-save>Save thoughts</button><button class="btn ghost" type="button" data-cancel>Cancel</button></div>`
@@ -230,13 +250,13 @@ function renderDialog(){
 
       <div>
         <h3>Hikes</h3>
-        ${hikes.length ? `<ul class="hikes">${hikes.map(h=>`<li><span>${esc(h.name)}</span><span class="mi">${h.miles?esc(h.miles)+" mi":""}</span><span class="dt">${h.date?fmtDate(h.date):""} <button class="link-btn" type="button" data-del="${esc(h.key)}" aria-label="Remove ${esc(h.name)}">Remove</button></span></li>`).join("")}</ul>` : `<p class="muted" style="margin:0">No hikes logged yet.</p>`}
-        <form class="hike-form" id="hikeForm" autocomplete="off">
+        ${hikes.length ? `<ul class="hikes">${hikes.map(h=>`<li><span>${esc(h.name)}</span><span class="mi">${h.miles?esc(h.miles)+" mi":""}</span><span class="dt">${h.date?fmtDate(h.date):""}${isGuest() ? "" : ` <button class="link-btn" type="button" data-del="${esc(h.key)}" aria-label="Remove ${esc(h.name)}">Remove</button>`}</span></li>`).join("")}</ul>` : `<p class="muted" style="margin:0">No hikes logged yet.</p>`}
+        ${isGuest() ? "" : `<form class="hike-form" id="hikeForm" autocomplete="off">
           <input name="name" placeholder="Trail name" aria-label="Trail name" required>
           <input name="miles" type="number" step="0.1" min="0" inputmode="decimal" placeholder="Miles" aria-label="Miles">
           <input name="date" type="date" aria-label="Date hiked">
           <button class="btn" type="submit">Add hike</button>
-        </form>
+        </form>`}
       </div>
 
       <div>
@@ -486,6 +506,7 @@ $("#addTodo").addEventListener("submit", async e=>{
   report(await saveState(), `${name} added to the list.`);
 });
 $("#editToggle").addEventListener("click", ()=>{
+  if(isGuest()) return;
   editMode = !editMode;
   document.body.classList.toggle("editing", editMode);
   const b = $("#editToggle"); b.setAttribute("aria-pressed", editMode); b.textContent = editMode ? "Done" : "Edit";
@@ -515,13 +536,22 @@ function setAuthMode(up){
   $("#authSwitch").textContent = up ? "Already have an account? Sign in" : "First time here? Create your account";
   $("#authForm").elements.password.autocomplete = up ? "new-password" : "current-password";
 }
+function setEditMode(on){
+  editMode = on;
+  document.body.classList.toggle("editing", on);
+  const b = $("#editToggle"); b.setAttribute("aria-pressed", on); b.textContent = on ? "Done" : "Edit";
+}
 async function showApp(){
   document.body.classList.remove("signed-out");
+  document.body.classList.toggle("guest", isGuest());
+  if(isGuest() && editMode) setEditMode(false);
   $("#who").textContent = !sb ? "Saving on this device only (Supabase not connected yet)." : session ? `Signed in as ${session.user.email}.` : "";
   $("#signOut").hidden = !(sb && session);
   $("#localBanner").hidden = !!sb;
   renderAll();
 }
+$("#signInBtn").addEventListener("click", ()=>{ if(dlg.open) dlg.close(); showSignIn(); window.scrollTo(0,0); });
+$("#authBack").addEventListener("click", ()=>{ showApp(); });
 $("#authSwitch").addEventListener("click", ()=>{ setAuthMode(!signUpMode); $("#authMsg").textContent = ""; });
 $("#authForm").addEventListener("submit", async e=>{
   e.preventDefault();
@@ -582,15 +612,19 @@ async function boot(){
   sb.auth.onAuthStateChange((event, s)=>{
     session = s;
     if(event === "SIGNED_IN") setTimeout(()=>{ showApp(); pull(); }, 0);
-    if(event === "SIGNED_OUT"){ setData({parks:[],stamps:[],never:[]}); showSignIn(); }
+    if(event === "SIGNED_OUT") setTimeout(async ()=>{ setEditMode(false); if(dlg.open) dlg.close(); await loadPublic(); showApp(); toast("Signed out. You're now seeing the public view."); }, 0);
   });
   const {data} = await sb.auth.getSession();
   session = data.session;
-  if(!session){ showSignIn(); return; }
+  if(!session){ await loadPublic(); showApp(); return; }
   showApp(); pull();
 }
 window.addEventListener("online", ()=>pull());
-document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState === "visible" && !dlg.open && !drag) pull(); });
+document.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState !== "visible" || dlg.open || drag) return;
+  if(isGuest()){ if(!document.body.classList.contains("signed-out")) loadPublic().then(renderAll); }
+  else pull();
+});
 if("serviceWorker" in navigator && location.protocol !== "file:"){
   window.addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 }
