@@ -29,10 +29,13 @@
 
 <header class="hero">
   <div class="wrap">
-    <p class="site-name">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 20h18L12 2Zm0 5 5.2 11H6.8L12 7Z" fill="currentColor"/></svg>
-      Park Log
-    </p>
+    <div class="topbar">
+      <p class="site-name">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 20h18L12 2Zm0 5 5.2 11H6.8L12 7Z" fill="currentColor"/></svg>
+        Park Log
+      </p>
+      <a class="portfolio-link" href="https://jsk5892.github.io/"><span aria-hidden="true">←</span> Portfolio</a>
+    </div>
     <h1 id="headline">Joshua Tree is number one.</h1>
     <p class="hero-sub">Every national park I've set foot in, ranked from my favorite on down, with the stamps I collected and the trails I hiked along the way.</p>
     <div class="tally">
@@ -48,6 +51,7 @@
         <button class="btn" id="authSubmit" type="submit">Sign in</button>
         <p class="auth-msg" id="authMsg" role="status"></p>
         <button class="link-btn" id="authSwitch" type="button" style="justify-self:start">First time here? Create your account</button>
+        <button class="link-btn" id="authBack" type="button" style="justify-self:start">Back to the Park Log without signing in</button>
       </form>
     </div>
   </div>
@@ -61,7 +65,8 @@
       <button role="tab" aria-selected="false" data-tab="passport">Passport stamps</button>
       <button role="tab" aria-selected="false" data-tab="todo">Still to go</button>
     </div>
-    <button class="edit-toggle" id="editToggle" type="button" aria-pressed="false">Edit</button>
+    <button class="edit-toggle owner-only" id="editToggle" type="button" aria-pressed="false">Edit</button>
+    <button class="edit-toggle guest-only" id="signInBtn" type="button">Sign in to edit</button>
   </div>
 </nav>
 
@@ -105,8 +110,9 @@
 <footer><div class="wrap">
   <span id="who"></span>
   <div class="foot-actions">
-    <button class="link-btn" id="backupBtn" type="button">Download a backup</button>
-    <label class="link-btn">Restore a backup<input type="file" id="restoreInput" accept="application/json,.json"></label>
+    <a class="link-btn" href="https://jsk5892.github.io/">Back to my portfolio</a>
+    <button class="link-btn owner-only" id="backupBtn" type="button">Download a backup</button>
+    <label class="link-btn owner-only">Restore a backup<input type="file" id="restoreInput" accept="application/json,.json"></label>
     <button class="link-btn" id="signOut" type="button" hidden>Sign out</button>
   </div>
 </div></footer>
