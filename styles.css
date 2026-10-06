@@ -30,7 +30,7 @@ button{font:inherit;color:inherit}
 
 /* ---------- hero ---------- */
 header.hero{padding:clamp(2rem,6vw,4.5rem) 0 2rem}
-.site-name{font-family:var(--display);font-weight:800;font-size:1.25rem;letter-spacing:.02em;margin:0 0 2.5rem;display:flex;align-items:center;gap:.5rem}
+.site-name{font-family:var(--display);font-weight:800;font-size:1.25rem;letter-spacing:.02em;margin:0;display:flex;align-items:center;gap:.5rem}
 .site-name svg{width:1.4rem;height:1.4rem}
 h1{font-family:var(--display);font-weight:900;font-size:clamp(3rem,10vw,7.2rem);line-height:.88;margin:0;letter-spacing:-.01em;max-width:11ch}
 .hero-sub{max-width:38rem;margin:1.5rem 0 0;font-size:1.2rem;color:var(--ink-soft)}
@@ -204,3 +204,14 @@ body.signed-out nav.tabs, body.signed-out main, body.signed-out .tally, body.sig
 .foot-actions label{cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .foot-actions input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
 .foot-actions [hidden]{display:none}
+
+/* ---------- top bar + guest view ---------- */
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin:0 0 2.5rem}
+.portfolio-link{font-family:var(--display);font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--gold);padding-bottom:.1rem;white-space:nowrap}
+.portfolio-link:hover{color:var(--gold)}
+.foot-actions a.link-btn{color:var(--ink-soft)}
+.guest-only{display:none !important}
+body.guest .guest-only{display:inline-flex !important}
+body.guest .owner-only{display:none !important}
+#authBack{display:none}
+body.guest #authBack{display:inline}
