@@ -1,0 +1,877 @@
+{
+ "parks": [
+  {
+   "id": "joshua",
+   "known": "Granite boulder piles and spiky Joshua trees where the Mojave and Colorado deserts meet.",
+   "latest": 2023,
+   "name": "Joshua Tree",
+   "state": "California",
+   "tier": "elite"
+  },
+  {
+   "id": "arches",
+   "known": "More than 2,000 natural sandstone arches, Delicate Arch the most famous.",
+   "latest": 2023,
+   "name": "Arches",
+   "state": "Utah",
+   "tier": "elite"
+  },
+  {
+   "id": "badlands",
+   "known": "Striped, eroded buttes and one of the richest fossil beds on earth.",
+   "latest": 2021,
+   "name": "Badlands",
+   "state": "South Dakota",
+   "tier": "elite"
+  },
+  {
+   "id": "bryce",
+   "known": "Amphitheaters packed with orange hoodoos, best seen at sunrise.",
+   "latest": 2023,
+   "name": "Bryce Canyon",
+   "state": "Utah",
+   "tier": "elite"
+  },
+  {
+   "id": "yosemite",
+   "known": "Granite walls, El Capitan, Half Dome, and huge spring waterfalls.",
+   "latest": 2022,
+   "name": "Yosemite",
+   "state": "California",
+   "tier": "awesome"
+  },
+  {
+   "id": "zion",
+   "known": "Towering canyon walls cut by the Virgin River: Angels Landing and the Narrows.",
+   "latest": 2023,
+   "name": "Zion",
+   "state": "Utah",
+   "tier": "awesome"
+  },
+  {
+   "id": "capitolreef",
+   "known": "The Waterpocket Fold, a 100-mile wrinkle in the earth, plus the orchards of Fruita.",
+   "latest": 2023,
+   "name": "Capitol Reef",
+   "state": "Utah",
+   "tier": "awesome"
+  },
+  {
+   "id": "olympic",
+   "known": "Rain forest, glaciated peaks, and wild coastline in one park.",
+   "latest": 2024,
+   "name": "Olympic",
+   "state": "Washington",
+   "tier": "awesome"
+  },
+  {
+   "id": "yellowstone",
+   "known": "Geysers, hot springs, and bison in the world's first national park.",
+   "latest": 2025,
+   "name": "Yellowstone",
+   "state": "Wyoming",
+   "tier": "awesome"
+  },
+  {
+   "id": "grandteton",
+   "known": "A jagged mountain front rising straight out of Jackson Hole.",
+   "latest": 2025,
+   "name": "Grand Teton",
+   "state": "Wyoming",
+   "tier": "great"
+  },
+  {
+   "id": "rainier",
+   "known": "A glacier-wrapped volcano with wildflower meadows at Paradise.",
+   "latest": 2024,
+   "name": "Mount Rainier",
+   "state": "Washington",
+   "tier": "great"
+  },
+  {
+   "id": "craterlake",
+   "known": "The deepest lake in the US, filling a collapsed volcano.",
+   "latest": 2018,
+   "name": "Crater Lake",
+   "state": "Oregon",
+   "tier": "great"
+  },
+  {
+   "id": "rocky",
+   "known": "Trail Ridge Road climbs past 12,000 feet across the Continental Divide.",
+   "latest": 2021,
+   "name": "Rocky Mountain",
+   "state": "Colorado",
+   "tier": "good"
+  },
+  {
+   "id": "grandcanyon",
+   "known": "A mile deep and 277 river miles long.",
+   "latest": 2023,
+   "name": "Grand Canyon",
+   "state": "Arizona",
+   "tier": "good"
+  },
+  {
+   "id": "canyonlands",
+   "known": "Mesas and canyons carved by the Colorado and Green rivers.",
+   "latest": 2023,
+   "name": "Canyonlands",
+   "state": "Utah",
+   "tier": "good"
+  },
+  {
+   "id": "northcascades",
+   "known": "Hundreds of glaciers and the turquoise water of Diablo Lake.",
+   "latest": 2024,
+   "name": "North Cascades",
+   "state": "Washington",
+   "tier": "good"
+  },
+  {
+   "id": "sanddunes",
+   "known": "The tallest dunes in North America, below the Sangre de Cristo range.",
+   "latest": 2021,
+   "name": "Great Sand Dunes",
+   "state": "Colorado",
+   "tier": "good"
+  },
+  {
+   "id": "acadia",
+   "known": "Rocky Atlantic coastline and the view from Cadillac Mountain.",
+   "latest": 2019,
+   "name": "Acadia",
+   "state": "Maine",
+   "tier": "ok"
+  },
+  {
+   "id": "smoky",
+   "known": "Misty ridges in the most-visited national park in the country.",
+   "latest": 2025,
+   "name": "Great Smoky Mountains",
+   "state": "Tennessee",
+   "tier": "ok"
+  },
+  {
+   "id": "mammoth",
+   "known": "The longest known cave system in the world.",
+   "latest": 2010,
+   "name": "Mammoth Cave",
+   "state": "Kentucky",
+   "tier": "ok"
+  },
+  {
+   "id": "windcave",
+   "known": "Rare boxwork formations underground, bison prairie on top.",
+   "latest": 2021,
+   "name": "Wind Cave",
+   "state": "South Dakota",
+   "tier": "ok"
+  },
+  {
+   "id": "everglades",
+   "known": "A slow-moving river of grass, home to alligators and manatees.",
+   "latest": 2025,
+   "name": "Everglades",
+   "state": "Florida",
+   "tier": "ok"
+  },
+  {
+   "id": "shenandoah",
+   "known": "Skyline Drive along the crest of the Blue Ridge.",
+   "latest": 2017,
+   "name": "Shenandoah",
+   "state": "Virginia",
+   "tier": "ok"
+  },
+  {
+   "id": "newriver",
+   "known": "A deep river gorge spanned by one of the longest single-arch bridges in the world.",
+   "latest": 2025,
+   "name": "New River Gorge",
+   "state": "West Virginia",
+   "tier": "ok"
+  },
+  {
+   "id": "biscayne",
+   "known": "Ninety-five percent water: reefs, keys, and mangroves.",
+   "latest": 2025,
+   "name": "Biscayne",
+   "state": "Florida",
+   "tier": "skip"
+  },
+  {
+   "id": "pinnacles",
+   "known": "Volcanic spires, talus caves, and California condors.",
+   "latest": 2023,
+   "name": "Pinnacles",
+   "state": "California",
+   "tier": "skip"
+  },
+  {
+   "id": "indianadunes",
+   "known": "Lake Michigan beaches and dunes an hour from Chicago.",
+   "latest": 2021,
+   "name": "Indiana Dunes",
+   "state": "Indiana",
+   "tier": "skip"
+  },
+  {
+   "id": "blackcanyon",
+   "known": "Sheer, dark walls dropping more than 2,000 feet to the Gunnison River.",
+   "latest": 2009,
+   "name": "Black Canyon of the Gunnison",
+   "state": "Colorado",
+   "tier": "dr"
+  },
+  {
+   "id": "glacier",
+   "known": "Going-to-the-Sun Road and the peaks around Logan Pass.",
+   "latest": 2011,
+   "name": "Glacier",
+   "state": "Montana",
+   "tier": "dr"
+  },
+  {
+   "id": "lassen",
+   "known": "Boiling mud pots and fumaroles around Lassen Peak.",
+   "latest": null,
+   "name": "Lassen Volcanic",
+   "state": "California",
+   "tier": "dr"
+  },
+  {
+   "id": "sequoia",
+   "known": "The General Sherman Tree, the largest tree on earth by volume.",
+   "latest": null,
+   "name": "Sequoia",
+   "state": "California",
+   "tier": "dr"
+  },
+  {
+   "id": "kings",
+   "known": "One of the deepest canyons in North America, next door to Sequoia.",
+   "latest": null,
+   "name": "Kings Canyon",
+   "state": "California",
+   "tier": "dr"
+  },
+  {
+   "id": "gatewayarch",
+   "known": "A 630-foot stainless steel arch on the St. Louis riverfront.",
+   "latest": null,
+   "name": "Gateway Arch",
+   "state": "Missouri",
+   "tier": "bad"
+  }
+ ],
+ "stamps": [
+  {
+   "date": "2006-09-05",
+   "id": "s0",
+   "loc": "Three Rivers, California",
+   "name": "Yosemite",
+   "park": "yosemite"
+  },
+  {
+   "date": "2006-09-07",
+   "id": "s1",
+   "loc": "Yosemite, California",
+   "name": "Yosemite",
+   "park": "yosemite"
+  },
+  {
+   "date": "2008-07-06",
+   "id": "s2",
+   "loc": "Mammoth Cave, Kentucky",
+   "name": "Mammoth Cave",
+   "park": "mammoth"
+  },
+  {
+   "date": "2008-08-31",
+   "id": "s3",
+   "loc": "Paradise, Washington",
+   "name": "Mount Rainier",
+   "park": "rainier"
+  },
+  {
+   "date": "2009-08-17",
+   "id": "s4",
+   "loc": "Alpine Visitor Center",
+   "name": "Rocky Mountain",
+   "park": "rocky"
+  },
+  {
+   "date": "2009-08-21",
+   "id": "s5",
+   "loc": "Montrose, Colorado",
+   "name": "Black Canyon of the Gunnison",
+   "park": "blackcanyon"
+  },
+  {
+   "date": "2009-08-22",
+   "id": "s6",
+   "loc": "Mosca, Colorado",
+   "name": "Great Sand Dunes",
+   "park": "sanddunes"
+  },
+  {
+   "date": "2010-09-02",
+   "id": "s7",
+   "loc": "Mammoth Cave, Kentucky",
+   "name": "Mammoth Cave",
+   "park": "mammoth"
+  },
+  {
+   "date": "2011-07-14",
+   "id": "s8",
+   "loc": "Logan Pass, Montana",
+   "name": "Glacier",
+   "park": "glacier"
+  },
+  {
+   "date": "2011-07-18",
+   "id": "s9",
+   "loc": "Mammoth Visitor Center",
+   "name": "Yellowstone",
+   "park": "yellowstone"
+  },
+  {
+   "date": "2011-07-19",
+   "id": "s10",
+   "loc": "Old Faithful Visitor Center",
+   "name": "Yellowstone",
+   "park": "yellowstone"
+  },
+  {
+   "date": "2011-07-20",
+   "id": "s11",
+   "loc": "Memorial Parkway",
+   "name": "John D. Rockefeller Jr.",
+   "park": null
+  },
+  {
+   "date": "2011-07-20",
+   "id": "s12",
+   "loc": "Moose, Wyoming",
+   "name": "Grand Teton",
+   "park": "grandteton"
+  },
+  {
+   "date": "2013-04-01",
+   "id": "s13",
+   "loc": "Sugarlands Visitor Center",
+   "name": "Great Smoky Mountains",
+   "park": "smoky"
+  },
+  {
+   "date": "2015-04-09",
+   "id": "s14",
+   "loc": "St. Louis, Missouri",
+   "name": "Lewis & Clark Trail",
+   "park": null
+  },
+  {
+   "date": "2015-08-11",
+   "id": "s15",
+   "loc": "Boyhood Home Unit",
+   "name": "Abraham Lincoln Birthplace",
+   "park": null
+  },
+  {
+   "date": "2016-06-03",
+   "id": "s16",
+   "loc": "Vincennes, Indiana",
+   "name": "George Rogers Clark",
+   "park": null
+  },
+  {
+   "date": "2016-06-26",
+   "id": "s17",
+   "loc": "Loft Mountain",
+   "name": "Shenandoah",
+   "park": "shenandoah"
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s18",
+   "loc": "Washington, DC",
+   "name": "Franklin D. Roosevelt",
+   "park": null
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s19",
+   "loc": "Washington, DC",
+   "name": "Washington Monument",
+   "park": null
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s20",
+   "loc": "Washington, DC",
+   "name": "World War II",
+   "park": null
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s21",
+   "loc": "Washington, DC",
+   "name": "Korean War Veterans",
+   "park": null
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s22",
+   "loc": "Washington, DC",
+   "name": "Vietnam Veterans",
+   "park": null
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s23",
+   "loc": "Washington, DC",
+   "name": "National Mall",
+   "park": null
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s24",
+   "loc": "Washington, DC",
+   "name": "Martin Luther King Jr.",
+   "park": null
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s25",
+   "loc": "Washington, DC",
+   "name": "National Capital Region",
+   "park": null
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s26",
+   "loc": "Washington, DC",
+   "name": "Lincoln Memorial",
+   "park": null
+  },
+  {
+   "date": "2016-07-01",
+   "id": "s27",
+   "loc": "Washington, DC",
+   "name": "Thomas Jefferson",
+   "park": null
+  },
+  {
+   "date": "2016-07-02",
+   "id": "s28",
+   "loc": "Washington, DC",
+   "name": "George Mason",
+   "park": null
+  },
+  {
+   "date": "2016-10-29",
+   "id": "s29",
+   "loc": "Washington, DC",
+   "name": "Ford's Theatre",
+   "park": null
+  },
+  {
+   "date": "2017-07-03",
+   "id": "s30",
+   "loc": "Kill Devil Hills, North Carolina",
+   "name": "Wright Brothers",
+   "park": null
+  },
+  {
+   "date": "2017-07-05",
+   "id": "s31",
+   "loc": "Hatteras Island, North Carolina",
+   "name": "Cape Hatteras Light Station",
+   "park": null
+  },
+  {
+   "date": "2018-07-07",
+   "id": "s32",
+   "loc": "Craggy Gardens",
+   "name": "Blue Ridge Parkway",
+   "park": null
+  },
+  {
+   "date": "2018-08-07",
+   "id": "s33",
+   "loc": "Crater Lake, Oregon",
+   "name": "Crater Lake",
+   "park": "craterlake"
+  },
+  {
+   "date": "2018-08-08",
+   "id": "s34",
+   "loc": "Crater Lake, Oregon",
+   "name": "Crater Lake",
+   "park": "craterlake"
+  },
+  {
+   "date": "2018-08-10",
+   "id": "s35",
+   "loc": "Johnston Ridge Observatory",
+   "name": "Mount St. Helens",
+   "park": null
+  },
+  {
+   "date": "2018-10-29",
+   "id": "s36",
+   "loc": "Washington, DC",
+   "name": "Petersen House",
+   "park": null
+  },
+  {
+   "date": "2018-10-30",
+   "id": "s37",
+   "loc": "Washington, DC",
+   "name": "Vietnam Veterans",
+   "park": null
+  },
+  {
+   "date": "2018-10-30",
+   "id": "s38",
+   "loc": "Washington, DC",
+   "name": "National Mall",
+   "park": null
+  },
+  {
+   "date": "2018-10-30",
+   "id": "s39",
+   "loc": "Washington, DC",
+   "name": "Lincoln Memorial",
+   "park": null
+  },
+  {
+   "date": "2018-10-30",
+   "id": "s40",
+   "loc": "Washington, DC",
+   "name": "Korean War Veterans",
+   "park": null
+  },
+  {
+   "date": "2019-07-28",
+   "id": "s41",
+   "loc": "Mt. Washington State Park",
+   "name": "Mt. Washington",
+   "park": null
+  },
+  {
+   "date": "2019-07-30",
+   "id": "s42",
+   "loc": "Bar Harbor, Maine",
+   "name": "Acadia",
+   "park": "acadia"
+  },
+  {
+   "date": "2019-07-30",
+   "id": "s43",
+   "loc": "Cadillac Mountain",
+   "name": "Acadia",
+   "park": "acadia"
+  },
+  {
+   "date": "2019-08-02",
+   "id": "s44",
+   "loc": "Schoodic Woods",
+   "name": "Acadia",
+   "park": "acadia"
+  },
+  {
+   "date": "2021-06-07",
+   "id": "s45",
+   "loc": "Ben Reifel Visitor Center",
+   "name": "Badlands",
+   "park": "badlands"
+  },
+  {
+   "date": "2021-06-08",
+   "id": "s46",
+   "loc": "Wall, South Dakota",
+   "name": "National Grasslands",
+   "park": null
+  },
+  {
+   "date": "2021-06-09",
+   "id": "s47",
+   "loc": "Keystone, South Dakota",
+   "name": "Mount Rushmore",
+   "park": null
+  },
+  {
+   "date": "2021-06-10",
+   "id": "s48",
+   "loc": "Hot Springs, South Dakota",
+   "name": "Wind Cave",
+   "park": "windcave"
+  },
+  {
+   "date": "2021-06-12",
+   "id": "s49",
+   "loc": "Devils Tower, Wyoming",
+   "name": "Devils Tower",
+   "park": null
+  },
+  {
+   "date": "2021-06-14",
+   "id": "s50",
+   "loc": "Fall River Visitor Center",
+   "name": "Rocky Mountain",
+   "park": "rocky"
+  },
+  {
+   "date": "2021-06-14",
+   "id": "s51",
+   "loc": "Alpine Visitor Center",
+   "name": "Rocky Mountain",
+   "park": "rocky"
+  },
+  {
+   "date": "2021-06-17",
+   "id": "s52",
+   "loc": "Mosca, Colorado",
+   "name": "Great Sand Dunes",
+   "park": "sanddunes"
+  },
+  {
+   "date": "2022-04-03",
+   "id": "s53",
+   "loc": "Mill Valley, California",
+   "name": "Muir Woods",
+   "park": null
+  },
+  {
+   "date": "2022-04-03",
+   "id": "s54",
+   "loc": "San Francisco, California",
+   "name": "Golden Gate",
+   "park": null
+  },
+  {
+   "date": "2022-04-03",
+   "id": "s55",
+   "loc": "Redwood Creek Watershed",
+   "name": "Muir Ranch",
+   "park": null
+  },
+  {
+   "date": "2022-04-07",
+   "id": "s56",
+   "loc": "Yosemite, California",
+   "name": "Yosemite",
+   "park": "yosemite"
+  },
+  {
+   "date": "2023-03-31",
+   "id": "s57",
+   "loc": "Springdale, Utah",
+   "name": "Zion",
+   "park": "zion"
+  },
+  {
+   "date": "2023-04-01",
+   "id": "s58",
+   "loc": "Kolob Canyons",
+   "name": "Zion",
+   "park": "zion"
+  },
+  {
+   "date": "2023-04-03",
+   "id": "s59",
+   "loc": "Torrey, Utah",
+   "name": "Capitol Reef",
+   "park": "capitolreef"
+  },
+  {
+   "date": "2023-04-04",
+   "id": "s60",
+   "loc": "Island in the Sky District",
+   "name": "Canyonlands",
+   "park": "canyonlands"
+  },
+  {
+   "date": "2023-04-05",
+   "id": "s61",
+   "loc": "Moab, Utah",
+   "name": "Arches",
+   "park": "arches"
+  },
+  {
+   "date": "2023-04-05",
+   "id": "s62",
+   "loc": "Arches",
+   "name": "Old Spanish Trail",
+   "park": null
+  },
+  {
+   "date": "2023-04-06",
+   "id": "s63",
+   "loc": "Desert View Watchtower",
+   "name": "Grand Canyon",
+   "park": "grandcanyon"
+  },
+  {
+   "date": "2023-04-07",
+   "id": "s64",
+   "loc": "Kolb Studio",
+   "name": "Grand Canyon",
+   "park": "grandcanyon"
+  },
+  {
+   "date": "2023-04-11",
+   "id": "s65",
+   "loc": "Bryce Canyon City, Utah",
+   "name": "Bryce Canyon",
+   "park": "bryce"
+  },
+  {
+   "date": "2023-06-07",
+   "id": "s66",
+   "loc": "Twentynine Palms, California",
+   "name": "Joshua Tree",
+   "park": "joshua"
+  },
+  {
+   "date": "2024-07-26",
+   "id": "s67",
+   "loc": "Paradise, Washington",
+   "name": "Mount Rainier",
+   "park": "rainier"
+  },
+  {
+   "date": "2024-07-27",
+   "id": "s68",
+   "loc": "Quinault Rain Forest Station",
+   "name": "Olympic",
+   "park": "olympic"
+  },
+  {
+   "date": "2024-07-30",
+   "id": "s69",
+   "loc": "Port Angeles Visitor Center",
+   "name": "Olympic",
+   "park": "olympic"
+  },
+  {
+   "date": "2024-07-30",
+   "id": "s70",
+   "loc": "Hurricane Ridge",
+   "name": "Olympic",
+   "park": "olympic"
+  },
+  {
+   "date": "2024-07-31",
+   "id": "s71",
+   "loc": "Marblemount, Washington",
+   "name": "North Cascades",
+   "park": "northcascades"
+  },
+  {
+   "date": "2024-08-02",
+   "id": "s72",
+   "loc": "Newhalem, Washington",
+   "name": "North Cascades",
+   "park": "northcascades"
+  },
+  {
+   "date": "2025-01-08",
+   "id": "s73",
+   "loc": "Homestead, Florida",
+   "name": "Everglades",
+   "park": "everglades"
+  },
+  {
+   "date": "2025-01-08",
+   "id": "s74",
+   "loc": "Flamingo, Florida",
+   "name": "Everglades",
+   "park": "everglades"
+  },
+  {
+   "date": "2025-03-15",
+   "id": "s75",
+   "loc": "Sandstone Visitor Center",
+   "name": "New River Gorge",
+   "park": "newriver"
+  },
+  {
+   "date": "2025-07-20",
+   "id": "s76",
+   "loc": "Sugarlands Visitor Center",
+   "name": "Great Smoky Mountains",
+   "park": "smoky"
+  },
+  {
+   "date": "2025-07-28",
+   "id": "s77",
+   "loc": "Earthquake Lake Visitor Center",
+   "name": "Earthquake Lake",
+   "park": null
+  },
+  {
+   "date": "2025-07-28",
+   "id": "s78",
+   "loc": "Old Faithful Visitor Center",
+   "name": "Yellowstone",
+   "park": "yellowstone"
+  },
+  {
+   "date": "2025-08-01",
+   "id": "s79",
+   "loc": "Tower Fall",
+   "name": "Yellowstone",
+   "park": "yellowstone"
+  },
+  {
+   "date": "2025-08-01",
+   "id": "s80",
+   "loc": "Canyon Visitor Center",
+   "name": "Yellowstone",
+   "park": "yellowstone"
+  },
+  {
+   "date": "2026-03-14",
+   "id": "s81",
+   "loc": "Valley Forge, Pennsylvania",
+   "name": "Valley Forge",
+   "park": null
+  }
+ ],
+ "never": [
+  "Big Bend",
+  "Carlsbad Caverns",
+  "Channel Islands",
+  "Congaree",
+  "Cuyahoga Valley",
+  "Death Valley",
+  "Denali",
+  "Dry Tortugas",
+  "Gates of the Arctic",
+  "Glacier Bay",
+  "Great Basin",
+  "Guadalupe Mountains",
+  "Haleakalā",
+  "Hawaiʻi Volcanoes",
+  "Hot Springs",
+  "Isle Royale",
+  "Katmai",
+  "Kenai Fjords",
+  "Kobuk Valley",
+  "Lake Clark",
+  "Mesa Verde",
+  "National Park of American Samoa",
+  "Petrified Forest",
+  "Redwood",
+  "Saguaro",
+  "Theodore Roosevelt",
+  "Virgin Islands",
+  "Voyageurs",
+  "White Sands",
+  "Wrangell–St. Elias"
+ ],
+ "journal": {}
+}
