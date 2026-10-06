@@ -292,8 +292,10 @@ dialog.viewer::backdrop{background:#0D1714}
   nav.tabs button{padding:.85rem .55rem .65rem;font-size:1.05rem}
   nav.tabs .edit-toggle{padding:.3rem .8rem}
   .long-label{display:none}
+  .tablist{-webkit-mask-image:linear-gradient(to right,#000 82%,transparent);mask-image:linear-gradient(to right,#000 82%,transparent);padding-right:1.5rem}
+}
 
-  /* ---------- small fixes ---------- */
+/* ---------- small fixes ---------- */
 dialog{overflow-x:hidden}
 .dlg-body > *{min-width:0}
 .hike-form{grid-template-columns:minmax(0,1fr) 5.5rem minmax(0,11rem) auto}
@@ -302,6 +304,4 @@ dialog{overflow-x:hidden}
 nav.tabs button:focus-visible{outline-offset:-4px;border-radius:6px}
 @media (max-width:640px){
   .hike-form,.stamp-form{grid-template-columns:1fr 1fr}
-}
-  .tablist{-webkit-mask-image:linear-gradient(to right,#000 82%,transparent);mask-image:linear-gradient(to right,#000 82%,transparent);padding-right:1.5rem}
 }
