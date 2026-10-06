@@ -87,7 +87,7 @@ async function loadPublic(){
 }
 
 async function pull(){
-  if(!sb || !session || !navigator.onLine) return;
+  if(!sb || !session || !navigator.onLine || busy) return;
   const cached = readCache();
   if(cached && cached.dirty){ if(validData(cached.data)) setData(cached.data); renderAll(); report(await push(), "Changes you made offline are synced."); return; }
   const {data, error} = await sb.from("park_log").select("data").maybeSingle();
@@ -102,7 +102,7 @@ async function pull(){
 }
 
 let toastTimer;
-function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"), 3200); }
+function toast(msg, ms=3200){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastTimer); if(ms) toastTimer=setTimeout(()=>t.classList.remove("show"), ms); }
 
 /* ---------- live data ---------- */
 function userIsTyping(){ const a=document.activeElement; return a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName); }
@@ -148,15 +148,17 @@ function renderRanking(){
     const j = journal[p.id] || {};
     const hikes = (j.hikes||[]).length;
     const miles = (j.hikes||[]).reduce((a,h)=>a+(parseFloat(h.miles)||0),0);
+    const cov = coverOf(p.id);
     return `<li class="rank-row${p.tier==="elite"?" elite":""}" data-park="${p.id}">
       <button class="grip" type="button" data-grip aria-label="Move ${esc(p.name)}. Drag, or use the up and down arrow keys.">⠿</button>
       <div class="rank-num">${i+1}</div>
-      <div>
+      <div class="row-main">
         <button class="name-btn" type="button"><h2 class="park-name">${esc(p.name)}</h2></button>
         <p class="park-meta"><span>${esc(p.state)}</span>${tierChip(p.tier)}</p>
         ${j.blurb ? `<p class="blurb">${esc(j.blurb)}</p>` : (isGuest() ? "" : `<p class="blurb empty">No thoughts written yet. Open to add them.</p>`)}
         ${hikes ? `<p class="hike-count">${hikes} hike${hikes>1?"s":""} logged${miles?`, ${+miles.toFixed(1)} miles`:""}</p>`:""}
       </div>
+      ${cov ? `<img class="row-thumb" src="${esc(photoUrl(cov.thumb))}" alt="" loading="lazy" decoding="async" width="88" height="88">` : ""}
       <div class="latest">${p.latest || "—"}<small>${p.latest ? "last visit" : "year not logged"}</small></div>
     </li>`;
   }).join("");
@@ -195,7 +197,7 @@ function renderTodo(){
 
 function renderAll(){
   if(document.body.classList.contains("signed-out")) return;
-  renderHeader(); renderRanking(); renderTiers(); renderPassport(); renderTodo();
+  renderHeader(); renderRanking(); renderTiers(); renderPhotos(); renderPassport(); renderTodo();
   if(dlg.open && dlgMode && dlgMode.type==="park" && !editingBlurb && !userIsTyping()) renderDialog();
 }
 
@@ -230,15 +232,23 @@ function renderDialog(){
   const j = journal[id] || {blurb:"",hikes:[]};
   const st = state.stamps.filter(s=>s.park===id).sort((a,b)=>a.date.localeCompare(b.date));
   const hikes = (j.hikes||[]).slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+  const cov = coverOf(id), photos = photosOf(id), owner = canPhoto();
   dlg.innerHTML = `
-    <div class="dlg-head${T.light?" light-label":""}" style="--c:${T.c}">
+    <div class="dlg-head${cov?" has-cover":(T.light?" light-label":"")}" style="--c:${T.c}">
+      ${cov ? `<img class="head-img" src="${esc(photoUrl(cov.full))}" alt="">` : ""}
       <button class="close-btn" type="button" data-close aria-label="Close">×</button>
-      <div class="rk">#${rankOf(id)} of ${state.parks.length}, ${T.name}</div>
+      <div class="rk"><i class="tier-dot"></i>#${rankOf(id)} of ${state.parks.length}, ${T.name}</div>
       <h2 id="dlgTitle">${esc(p.name)}</h2>
       <p>${esc(p.state)}${p.latest?`, last visited ${p.latest}`:""}</p>
     </div>
     <div class="dlg-body">
       ${editMode ? `<div class="edit-panel"><h3>Park details</h3>${detailsForm(p,false)}</div>` : (p.known?`<p class="known">${esc(p.known)}</p>`:"")}
+
+      ${(photos.length || owner) ? `<div>
+        <h3>Photos ${owner ? `<label class="link-btn photo-pick">Add photos<input type="file" accept="image/*" multiple data-photo-input="${id}"></label>` : ""}</h3>
+        ${photos.length ? `<div class="photo-strip">${photos.map((ph,i)=>`<button class="photo-tile" type="button" data-view-park="${id}" data-index="${i}" aria-label="Open photo ${i+1} of ${photos.length}"><img src="${esc(photoUrl(ph.thumb))}" alt="${esc(ph.caption||"")}" loading="lazy" decoding="async">${photos.length>1 && cov && cov.id===ph.id ? `<span class="cover-tag">Cover</span>` : ""}</button>`).join("")}</div>`
+          : `<p class="muted" style="margin:0">No photos yet. Add some from your phone's photo library or your computer.</p>`}
+      </div>` : ""}
 
       <div>
         <h3>My thoughts ${!editingBlurb && !isGuest() ? `<button class="link-btn" type="button" data-edit>${j.blurb?"Edit":"Write"}</button>`:""}</h3>
@@ -325,6 +335,8 @@ function bumpLatest(parkId, date){
 
 dlg.addEventListener("click", async e=>{
   if(e.target === dlg || e.target.closest("[data-close]")) { dlg.close(); return; }
+  const vp = e.target.closest("[data-view-park]");
+  if(vp){ openViewer({type:"park", id:vp.dataset.viewPark}, +vp.dataset.index); return; }
   if(e.target.closest("[data-edit]")) { editingBlurb = true; renderDialog(); $("#blurbInput").focus(); return; }
   if(e.target.closest("[data-cancel]")) { editingBlurb = false; renderDialog(); return; }
   if(e.target.closest("[data-save]")) {
@@ -521,6 +533,235 @@ document.querySelectorAll("nav.tabs [data-tab]").forEach(b=>b.addEventListener("
 }));
 
 
+/* ---------- photos ---------- */
+const BUCKET = "park-photos";
+let busy = false;                       // true while photos are uploading
+let photoFilter = "all";
+const canPhoto = () => !!sb && !!session;
+const photosOf = id => ((journal[id] && journal[id].photos) || []);
+function coverOf(id){
+  const j = journal[id]; const ps = photosOf(id);
+  if(!ps.length) return null;
+  return ps.find(x=>x.id === (j && j.cover)) || ps[0];
+}
+const photoUrl = path => (sb && path) ? sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl : "";
+function galleryItems(filter){
+  const out = [];
+  state.parks.forEach(p=>{ if(filter==="all" || filter===p.id) photosOf(p.id).forEach(ph=>out.push({park:p.id, photo:ph})); });
+  return out;
+}
+
+function renderPhotos(){
+  const all = galleryItems("all");
+  const parksWith = state.parks.filter(p=>photosOf(p.id).length);
+  if(photoFilter !== "all" && !parksWith.some(p=>p.id===photoFilter)) photoFilter = "all";
+  const n = all.length, m = parksWith.length;
+  $("#photosIntro").textContent = n
+    ? `${n} photo${n>1?"s":""} from ${m} park${m>1?"s":""}, in ranking order. Tap any photo to see it full size.`
+    : (canPhoto() ? "No photos yet. Pick a park, tap Add photos, and choose from your photo library or computer." : "No photos yet.");
+  $("#photoFilters").innerHTML = m > 1
+    ? [`<button type="button" data-pfilter="all" aria-pressed="${photoFilter==="all"}">All<span>${n}</span></button>`]
+        .concat(parksWith.map(p=>`<button type="button" data-pfilter="${p.id}" aria-pressed="${photoFilter===p.id}">${esc(p.name)}<span>${photosOf(p.id).length}</span></button>`)).join("")
+    : "";
+  const up = $("#photoUpload"); up.hidden = !canPhoto();
+  const sel = $("#photoPark"); const keep = photoFilter !== "all" ? photoFilter : sel.value;
+  sel.innerHTML = state.parks.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+  if(keep && parkById(keep)) sel.value = keep;
+  const items = galleryItems(photoFilter);
+  $("#photoGrid").innerHTML = items.map((it,i)=>`<button class="photo-tile" type="button" data-view-all="${i}" aria-label="${esc(parkById(it.park).name)} photo">
+      <img src="${esc(photoUrl(it.photo.thumb))}" alt="${esc(it.photo.caption||"")}" loading="lazy" decoding="async">
+      ${photoFilter==="all" ? `<span class="tile-label">${esc(parkById(it.park).name)}</span>` : ""}
+    </button>`).join("");
+}
+
+/* resize on the device before upload: smaller files, and the GPS location is stripped */
+function loadImage(file){
+  return new Promise((res,rej)=>{
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = ()=>res({img, url});
+    img.onerror = ()=>{ URL.revokeObjectURL(url); rej(new Error("unreadable")); };
+    img.src = url;
+  });
+}
+function drawScaled(src, sw, sh, max, quality){
+  const s = Math.min(1, max / Math.max(sw, sh));
+  const w = Math.max(1, Math.round(sw*s)), h = Math.max(1, Math.round(sh*s));
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const ctx = c.getContext("2d");
+  ctx.fillStyle = "#fff"; ctx.fillRect(0,0,w,h);
+  ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(src, 0, 0, w, h);
+  return new Promise((res,rej)=>c.toBlob(b=>{ b ? res({blob:b, w, h, canvas:c}) : rej(new Error("encode")); }, "image/jpeg", quality));
+}
+
+async function uploadPhotos(parkId, files){
+  const p = parkById(parkId);
+  if(!canPhoto() || !p) return;
+  if(busy){ toast("Still uploading the last batch. Give it a moment."); return; }
+  if(!navigator.onLine){ toast("You're offline. Photos need a connection to upload."); return; }
+  const list = files.filter(f=>/^image\//.test(f.type) || /\.(jpe?g|png|webp|heic|heif|gif)$/i.test(f.name||""));
+  if(!list.length){ toast("Those files aren't photos."); return; }
+  busy = true;
+  let done = 0; const failed = [];
+  try{
+    for(let k=0; k<list.length; k++){
+      const f = list[k];
+      toast(`Uploading photo ${k+1} of ${list.length} to ${p.name}…`, 0);
+      try{
+        const {img, url} = await loadImage(f);
+        const full = await drawScaled(img, img.naturalWidth, img.naturalHeight, 2048, 0.82);
+        URL.revokeObjectURL(url);
+        const thumb = await drawScaled(full.canvas, full.w, full.h, 640, 0.78);
+        full.canvas.width = full.canvas.height = 0; thumb.canvas.width = thumb.canvas.height = 0;
+        const id = uid("ph");
+        const base = `${session.user.id}/${parkId}/${id}`;
+        const store = sb.storage.from(BUCKET);
+        const opts = {contentType:"image/jpeg", cacheControl:"31536000", upsert:false};
+        let r = await store.upload(`${base}.jpg`, full.blob, opts);
+        if(r.error) throw r.error;
+        r = await store.upload(`${base}-t.jpg`, thumb.blob, opts);
+        if(r.error){ await store.remove([`${base}.jpg`]); throw r.error; }
+        const j = journal[parkId] || {blurb:"", hikes:[]};
+        journal[parkId] = {...j, photos:[...(j.photos||[]), {id, full:`${base}.jpg`, thumb:`${base}-t.jpg`, w:full.w, h:full.h, caption:"", added:new Date().toISOString()}]};
+        done++;
+        renderAll();
+        await push();
+      }catch(err){
+        console.warn("Photo upload failed:", f.name, err);
+        failed.push(/heic|heif/i.test(f.name||"") || (err && err.message==="unreadable") ? `${f.name||"a photo"} (this browser can't open that format)` : (f.name||"a photo"));
+      }
+    }
+  } finally {
+    busy = false;
+  }
+  if(failed.length && done) toast(`Added ${done} photo${done>1?"s":""} to ${p.name}. Couldn't add: ${failed.join(", ")}.`, 7000);
+  else if(failed.length) toast(`Couldn't add ${failed.join(", ")}. Check your connection and that you're signed in, then try again.`, 7000);
+  else toast(`Added ${done} photo${done>1?"s":""} to ${p.name}.`);
+}
+
+document.addEventListener("change", e=>{
+  const input = e.target.closest && e.target.closest("[data-photo-input]");
+  if(!input) return;
+  const files = [...(input.files||[])];
+  input.value = "";
+  const parkId = input.dataset.photoInput || $("#photoPark").value;
+  if(files.length) uploadPhotos(parkId, files);
+});
+
+/* ---------- photo viewer ---------- */
+const viewerEl = $("#viewer");
+let viewer = {source:null, i:0, editing:false};
+function viewerItems(){
+  if(!viewer.source) return [];
+  return viewer.source.type === "park"
+    ? photosOf(viewer.source.id).map(ph=>({park:viewer.source.id, photo:ph}))
+    : galleryItems(viewer.source.filter);
+}
+function openViewer(source, index){
+  viewer = {source, i:index, editing:false};
+  renderViewer();
+  if(!viewerEl.open) viewerEl.showModal();
+}
+function renderViewer(){
+  const items = viewerItems();
+  if(!items.length){ if(viewerEl.open) viewerEl.close(); return; }
+  viewer.i = Math.max(0, Math.min(viewer.i, items.length-1));
+  const it = items[viewer.i], ph = it.photo, p = parkById(it.park);
+  if(!p){ viewerEl.close(); return; }
+  const n = items.length, owner = canPhoto();
+  const isCover = (coverOf(it.park)||{}).id === ph.id;
+  viewerEl.innerHTML = `
+    <div class="v-top"><span>${viewer.i+1} of ${n}</span><button class="close-btn" type="button" data-vclose aria-label="Close photo">×</button></div>
+    <div class="v-stage" id="vStage">
+      ${n>1 ? `<button class="v-nav v-prev" type="button" data-vstep="-1" aria-label="Previous photo">‹</button>` : ""}
+      <img class="v-img" src="${esc(photoUrl(ph.full))}" alt="${esc(ph.caption || p.name)}" style="background-image:url('${esc(photoUrl(ph.thumb))}')" ${ph.w&&ph.h?`width="${ph.w}" height="${ph.h}"`:""}>
+      ${n>1 ? `<button class="v-nav v-next" type="button" data-vstep="1" aria-label="Next photo">›</button>` : ""}
+    </div>
+    <div class="v-bar">
+      <div class="v-info">
+        ${viewer.editing
+          ? `<form class="v-edit" id="vCapForm" autocomplete="off"><input name="cap" maxlength="200" placeholder="Caption, like 'Lamar Valley bison'" value="${esc(ph.caption||"")}" aria-label="Photo caption"><button class="btn" type="submit">Save</button><button class="btn ghost" type="button" data-vcapcancel style="color:#EEF0E6;border-color:rgba(238,240,230,.6)">Cancel</button></form>`
+          : (ph.caption ? `<p class="v-cap">${esc(ph.caption)}</p>` : "")}
+        <button class="v-park" type="button" data-vpark>${esc(p.name)}, #${rankOf(p.id)}</button>
+      </div>
+      ${owner && !viewer.editing ? `<div class="v-actions">
+        ${isCover ? `<span class="v-badge">Cover photo</span>` : `<button type="button" data-vcover>Set as cover</button>`}
+        <button type="button" data-vcaption>${ph.caption ? "Edit caption" : "Add caption"}</button>
+        <button type="button" class="danger" data-vdelete>Delete</button>
+      </div>` : ""}
+    </div>`;
+  if(viewer.editing){ const inp = viewerEl.querySelector("#vCapForm input"); inp.focus(); inp.select(); }
+}
+function stepViewer(d){
+  const n = viewerItems().length; if(n < 2 || viewer.editing) return;
+  viewer.i = (viewer.i + d + n) % n; renderViewer();
+}
+
+viewerEl.addEventListener("close", ()=>{ viewer = {source:null, i:0, editing:false}; viewerEl.innerHTML = ""; });
+viewerEl.addEventListener("click", async e=>{
+  if(e.target.closest("[data-vclose]")){ viewerEl.close(); return; }
+  const step = e.target.closest("[data-vstep]"); if(step){ stepViewer(+step.dataset.vstep); return; }
+  const it = viewerItems()[viewer.i]; if(!it) return;
+  if(e.target.closest("[data-vpark]")){
+    viewerEl.close();
+    if(!(dlg.open && dlgMode && dlgMode.type==="park" && dlgMode.id===it.park)) openDialog({type:"park", id:it.park});
+    return;
+  }
+  if(e.target.closest("[data-vcaption]")){ viewer.editing = true; renderViewer(); return; }
+  if(e.target.closest("[data-vcapcancel]")){ viewer.editing = false; renderViewer(); return; }
+  if(e.target.closest("[data-vcover]")){
+    journal[it.park] = {...journal[it.park], cover: it.photo.id};
+    renderAll(); renderViewer();
+    report(await push(), `Cover photo set for ${parkById(it.park).name}.`);
+    return;
+  }
+  if(e.target.closest("[data-vdelete]")){
+    if(!confirm("Delete this photo? This can't be undone.")) return;
+    const j = journal[it.park]; const ph = it.photo;
+    const next = {...j, photos: photosOf(it.park).filter(x=>x.id!==ph.id)};
+    if(next.cover === ph.id) delete next.cover;
+    journal[it.park] = next;
+    renderAll(); renderViewer();
+    const r = await push();
+    sb.storage.from(BUCKET).remove([ph.full, ph.thumb]).catch(()=>{});
+    report(r, "Photo deleted.");
+  }
+});
+viewerEl.addEventListener("submit", async e=>{
+  if(e.target.id !== "vCapForm") return;
+  e.preventDefault();
+  const it = viewerItems()[viewer.i]; if(!it) return;
+  const cap = e.target.elements.cap.value.trim().slice(0,200);
+  journal[it.park] = {...journal[it.park], photos: photosOf(it.park).map(x=>x.id===it.photo.id ? {...x, caption:cap} : x)};
+  viewer.editing = false;
+  renderAll(); renderViewer();
+  report(await push(), "Caption saved.");
+});
+document.addEventListener("keydown", e=>{
+  if(!viewerEl.open || viewer.editing) return;
+  if(e.key==="ArrowLeft"){ e.preventDefault(); stepViewer(-1); }
+  if(e.key==="ArrowRight"){ e.preventDefault(); stepViewer(1); }
+});
+let touchStart = null;
+viewerEl.addEventListener("touchstart", e=>{
+  if(!e.target.closest("#vStage") || e.touches.length !== 1){ touchStart = null; return; }
+  touchStart = {x:e.touches[0].clientX, y:e.touches[0].clientY};
+}, {passive:true});
+viewerEl.addEventListener("touchend", e=>{
+  if(!touchStart) return;
+  const t = e.changedTouches[0]; const dx = t.clientX - touchStart.x, dy = t.clientY - touchStart.y;
+  touchStart = null;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)*1.5) stepViewer(dx < 0 ? 1 : -1);
+}, {passive:true});
+
+document.addEventListener("click", e=>{
+  const f = e.target.closest("[data-pfilter]");
+  if(f){ photoFilter = f.dataset.pfilter; renderPhotos(); return; }
+  const t = e.target.closest("[data-view-all]");
+  if(t){ openViewer({type:"all", filter:photoFilter}, +t.dataset.viewAll); }
+});
+
 /* ---------- sign in ---------- */
 let signUpMode = false;
 function showSignIn(msg){
@@ -550,7 +791,7 @@ async function showApp(){
   $("#localBanner").hidden = !!sb;
   renderAll();
 }
-$("#signInBtn").addEventListener("click", ()=>{ if(dlg.open) dlg.close(); showSignIn(); window.scrollTo(0,0); });
+$("#signInBtn").addEventListener("click", ()=>{ if(viewerEl.open) viewerEl.close(); if(dlg.open) dlg.close(); showSignIn(); window.scrollTo(0,0); });
 $("#authBack").addEventListener("click", ()=>{ showApp(); });
 $("#authSwitch").addEventListener("click", ()=>{ setAuthMode(!signUpMode); $("#authMsg").textContent = ""; });
 $("#authForm").addEventListener("submit", async e=>{
@@ -612,7 +853,7 @@ async function boot(){
   sb.auth.onAuthStateChange((event, s)=>{
     session = s;
     if(event === "SIGNED_IN") setTimeout(()=>{ showApp(); pull(); }, 0);
-    if(event === "SIGNED_OUT") setTimeout(async ()=>{ setEditMode(false); if(dlg.open) dlg.close(); await loadPublic(); showApp(); toast("Signed out. You're now seeing the public view."); }, 0);
+    if(event === "SIGNED_OUT") setTimeout(async ()=>{ setEditMode(false); if(viewerEl.open) viewerEl.close(); if(dlg.open) dlg.close(); await loadPublic(); showApp(); toast("Signed out. You're now seeing the public view."); }, 0);
   });
   const {data} = await sb.auth.getSession();
   session = data.session;
@@ -621,7 +862,7 @@ async function boot(){
 }
 window.addEventListener("online", ()=>pull());
 document.addEventListener("visibilitychange", ()=>{
-  if(document.visibilityState !== "visible" || dlg.open || drag) return;
+  if(document.visibilityState !== "visible" || dlg.open || viewerEl.open || drag || busy) return;
   if(isGuest()){ if(!document.body.classList.contains("signed-out")) loadPublic().then(renderAll); }
   else pull();
 });
