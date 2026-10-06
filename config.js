@@ -3,6 +3,6 @@
 // rules in supabase-setup.sql, which let only your signed-in account read or write it.
 // Until these are filled in, the app runs in "this device only" mode.
 window.PARKLOG_CONFIG = {
-  supabaseUrl: "https://khzcjawrftsrpxwdrlpn.supabase.co/rest/v1/",
+  supabaseUrl: "https://khzcjawrftsrpxwdrlpn.supabase.co",
   supabaseKey: "sb_publishable_Za1wSsdp9va-kBZklWJRYQ_EOIecoQf"
 };
