@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Park Log</title>
+<meta name="description" content="My national parks, ranked, with hikes and passport stamps.">
+<meta name="theme-color" content="#1B312C">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Park Log">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="ink" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2"/>
+  </filter>
+</svg>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="site-name">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 20h18L12 2Zm0 5 5.2 11H6.8L12 7Z" fill="currentColor"/></svg>
+      Park Log
+    </p>
+    <h1 id="headline">Joshua Tree is number one.</h1>
+    <p class="hero-sub">Every national park I've set foot in, ranked from my favorite on down, with the stamps I collected and the trails I hiked along the way.</p>
+    <div class="tally">
+      <div class="tally-grid" id="tally" aria-hidden="true"></div>
+      <p id="tallyText"></p>
+    </div>
+    <p class="banner" id="localBanner" hidden>Supabase isn't connected yet, so changes are saved in this browser only. Follow the setup steps in README.md to save them to your account.</p>
+    <div class="auth">
+      <form class="auth-card" id="authForm" autocomplete="on">
+        <h2 id="authTitle">Sign in</h2>
+        <label>Email<input name="email" type="email" autocomplete="email" required></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" minlength="6" required></label>
+        <button class="btn" id="authSubmit" type="submit">Sign in</button>
+        <p class="auth-msg" id="authMsg" role="status"></p>
+        <button class="link-btn" id="authSwitch" type="button" style="justify-self:start">First time here? Create your account</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Views">
+  <div class="wrap">
+    <div class="tablist" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="ranking">Ranking</button>
+      <button role="tab" aria-selected="false" data-tab="tiers">Tier list</button>
+      <button role="tab" aria-selected="false" data-tab="passport">Passport stamps</button>
+      <button role="tab" aria-selected="false" data-tab="todo">Still to go</button>
+    </div>
+    <button class="edit-toggle" id="editToggle" type="button" aria-pressed="false">Edit</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section id="ranking" role="tabpanel">
+    <p class="section-intro" id="rankIntro"></p>
+    <ol class="ranking" id="rankList"></ol>
+    <div class="add-row">
+      <button class="btn" type="button" data-add-park>Add a park</button>
+      <span class="muted">Drag the handle beside a park to move it up or down the ranking.</span>
+    </div>
+  </section>
+
+  <section id="tiers" role="tabpanel" hidden>
+    <p class="section-intro">The same parks, grouped by how much I'd push a friend to go.</p>
+    <div class="tiers" id="tierList"></div>
+    <div class="add-row"><span class="muted">Open a park to move it to a different tier.</span></div>
+  </section>
+
+  <section id="passport" role="tabpanel" hidden>
+    <p class="section-intro">Every cancellation stamp in my passport book, national parks and otherwise, grouped by year.<span class="legend-line">Solid ring: a national park (open it for details). Dashed ring: a monument, memorial, or other site.</span></p>
+    <div id="passportList"></div>
+    <div class="add-row">
+      <button class="btn" type="button" data-add-stamp>Add a stamp</button>
+      <span class="muted">Open any stamp to change or remove it.</span>
+    </div>
+  </section>
+
+  <section id="todo" role="tabpanel" hidden>
+    <p class="section-intro" id="todoIntro"></p>
+    <ul class="todo-grid" id="todoList"></ul>
+    <div class="add-row">
+      <form class="add-todo" id="addTodo" autocomplete="off">
+        <input name="name" placeholder="Park name" aria-label="Park to add to the list" required>
+        <button class="btn" type="submit">Add to list</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <span id="who"></span>
+  <div class="foot-actions">
+    <button class="link-btn" id="backupBtn" type="button">Download a backup</button>
+    <label class="link-btn">Restore a backup<input type="file" id="restoreInput" accept="application/json,.json"></label>
+    <button class="link-btn" id="signOut" type="button" hidden>Sign out</button>
+  </div>
+</div></footer>
+
+<dialog id="dlg" aria-labelledby="dlgTitle"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
