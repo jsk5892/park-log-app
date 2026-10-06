@@ -62,11 +62,12 @@
     <div class="tablist" role="tablist">
       <button role="tab" aria-selected="true" data-tab="ranking">Ranking</button>
       <button role="tab" aria-selected="false" data-tab="tiers">Tier list</button>
+      <button role="tab" aria-selected="false" data-tab="photos">Photos</button>
       <button role="tab" aria-selected="false" data-tab="passport">Passport stamps</button>
       <button role="tab" aria-selected="false" data-tab="todo">Still to go</button>
     </div>
     <button class="edit-toggle owner-only" id="editToggle" type="button" aria-pressed="false">Edit</button>
-    <button class="edit-toggle guest-only" id="signInBtn" type="button">Sign in to edit</button>
+    <button class="edit-toggle guest-only" id="signInBtn" type="button">Sign in<span class="long-label"> to edit</span></button>
   </div>
 </nav>
 
@@ -84,6 +85,18 @@
     <p class="section-intro">The same parks, grouped by how much I'd push a friend to go.</p>
     <div class="tiers" id="tierList"></div>
     <div class="add-row"><span class="muted">Open a park to move it to a different tier.</span></div>
+  </section>
+
+  <section id="photos" role="tabpanel" hidden>
+    <p class="section-intro" id="photosIntro"></p>
+    <div class="photo-toolbar">
+      <div class="photo-filters" id="photoFilters"></div>
+      <div class="photo-upload owner-only" id="photoUpload" hidden>
+        <select id="photoPark" aria-label="Park to add photos to"></select>
+        <label class="btn photo-pick">Add photos<input type="file" accept="image/*" multiple data-photo-input=""></label>
+      </div>
+    </div>
+    <div class="photo-grid" id="photoGrid"></div>
   </section>
 
   <section id="passport" role="tabpanel" hidden>
@@ -118,6 +131,7 @@
 </div></footer>
 
 <dialog id="dlg" aria-labelledby="dlgTitle"></dialog>
+<dialog id="viewer" class="viewer" aria-label="Photo viewer"></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="config.js"></script>
