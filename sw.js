@@ -1,5 +1,5 @@
 // Bump this version whenever you push changes, so phones pick up the new files.
-const VERSION = "parklog-v2";
+const VERSION = "parklog-v3";
 const APP_FILES = [
   "./", "index.html", "styles.css", "app.js", "config.js", "park-log-data.json",
   "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"
