@@ -35,7 +35,7 @@ header.hero{padding:clamp(2rem,6vw,4.5rem) 0 2rem}
 h1{font-family:var(--display);font-weight:900;font-size:clamp(3rem,10vw,7.2rem);line-height:.88;margin:0;letter-spacing:-.01em;max-width:11ch}
 .hero-sub{max-width:38rem;margin:1.5rem 0 0;font-size:1.2rem;color:var(--ink-soft)}
 .tally{margin-top:2.5rem}
-.tally-grid{display:grid;grid-template-columns:repeat(21,1fr);gap:4px;max-width:640px}
+.tally-grid{display:grid;grid-template-columns:repeat(16,1fr);gap:4px;max-width:560px}
 .tally-grid span{aspect-ratio:1;border-radius:50%;border:1.5px solid var(--ink);background:#fff}
 .tally-grid span.v{background:var(--ink)}
 .tally-grid span.v.top{background:var(--t-elite);border-color:var(--t-elite)}
@@ -149,7 +149,7 @@ footer{border-top:2px solid var(--ink);padding:1.5rem 0 3rem;font-size:.9rem;col
   .stamp{width:104px;height:104px}
   .hike-form{grid-template-columns:1fr 1fr}
   .hike-form input:first-child{grid-column:1/-1}
-  .tally-grid{grid-template-columns:repeat(11,1fr)}
+  .tally-grid{grid-template-columns:repeat(16,1fr);gap:3px}
 }
 
 /* ---------- edit mode ---------- */
